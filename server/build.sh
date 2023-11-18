@@ -4,7 +4,7 @@
 project_dir="./src/cmd/main"
 
 # Directory where you want to run go build
-build_dir="./bin"
+build_dir="../../../bin"
 
 # Change to the project directory
 cd "$project_dir" || exit
@@ -14,7 +14,7 @@ go build -o "$build_dir/learningPathsServer"
 
 # Check if the build was successful
 if [ $? -eq 0 ]; then
-  echo "Build successful. Binary saved to: $build_dir/learningPathsServer"
+  echo "Build successful. Binary saved to: ./bin/learningPathsServer"
 else
   echo "Build failed."
 fi
