@@ -13,13 +13,11 @@ type RequestHandlerClient struct {
 	DB *gorm.DB
 }
 
-var handler *RequestHandlerClient
-
 func configureRoutes(handler *RequestHandlerClient) {
 	http.HandleFunc("/createAccount", handler.CreateAccountRequestHandler)
 }
 
-func StartServer() {
+func RunServer() {
 	// connect to db
 	var db *gorm.DB
 	db, err := database.ConnectAndSetup()
