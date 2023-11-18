@@ -9,6 +9,7 @@ build_dir="../../../bin"
 # Change to the project directory
 cd "$project_dir" || exit
 
+echo "Building...."
 # Run go build with the -o flag to specify the output path
 go build -o "$build_dir/learningPathsServer"
 
@@ -17,4 +18,5 @@ if [ $? -eq 0 ]; then
   echo "Build successful. Binary saved to: ./bin/learningPathsServer"
 else
   echo "Build failed."
+  exit 1
 fi
