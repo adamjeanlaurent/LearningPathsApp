@@ -1,0 +1,8 @@
+
+MileStone 1:
+- Logging
+- creating accounts
+- creating learning path
+- deleting learning path
+- create stop
+- deleting stop
