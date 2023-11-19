@@ -6,3 +6,8 @@ MileStone 1:
 - deleting learning path
 - create stop
 - deleting stop
+- Configuration with Env Vars
+
+
+MileStore 2:
+- (this is done after basic UI is done)
