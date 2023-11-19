@@ -2,9 +2,9 @@ package routes
 
 import (
 	"log"
-	"net/http"
 
 	"github.com/adamjeanlaurent/LearningPathsApp/internal/database"
+	"github.com/gofiber/fiber/v2"
 
 	"github.com/jinzhu/gorm"
 )
@@ -13,8 +13,9 @@ type RequestHandlerClient struct {
 	DB *gorm.DB
 }
 
-func configureRoutes(handler *RequestHandlerClient) {
-	http.HandleFunc("/createAccount", handler.CreateAccountRequestHandler)
+func configureRoutes(app *fiber.App, handler *RequestHandlerClient) {
+	var v1 fiber.Router = app.Group("v1/api")
+	v1.Get("/createAccount", handler.CreateAccountRequestHandler)
 }
 
 func RunServer() {
@@ -32,7 +33,10 @@ func RunServer() {
 	}
 
 	handler := &RequestHandlerClient{DB: db}
-	configureRoutes(handler)
 
-	log.Fatal(http.ListenAndServe(":5000", nil))
+	var app *fiber.App = fiber.New()
+
+	configureRoutes(app, handler)
+
+	log.Fatal(app.Listen(":3000"))
 }

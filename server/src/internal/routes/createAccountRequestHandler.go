@@ -1,9 +1,7 @@
 package routes
 
-import (
-	"net/http"
-)
+import "github.com/gofiber/fiber/v2"
 
-func (handler *RequestHandlerClient) CreateAccountRequestHandler(rw http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
+func (handler *RequestHandlerClient) CreateAccountRequestHandler(c *fiber.Ctx) error {
+	return c.SendString("hi")
 }
