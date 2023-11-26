@@ -2,12 +2,15 @@ package configuration
 
 import "os"
 
-type AppConfig struct {
-	environment string
+var (
+	environment  = os.Getenv("MYAPP_ENV")
+	jwtSecretKey = os.Getenv("JWT_SECRET_KEY")
+)
+
+func GetEnvironment() string {
+	return environment
 }
 
-func (config *AppConfig) GetEnvironment() string {
-	return config.environment
+func GetJwtSecretKey() string {
+	return jwtSecretKey
 }
-
-var Config = &AppConfig{environment: os.Getenv("MYAPP_ENV")}

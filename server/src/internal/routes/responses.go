@@ -13,4 +13,5 @@ type BaseResponseBody struct {
 
 type CreateAccountResponseBody struct {
 	BaseResponseBody
+	Email string
 }

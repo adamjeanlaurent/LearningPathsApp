@@ -4,6 +4,7 @@ import (
 	"github.com/adamjeanlaurent/LearningPathsApp/internal/database/models"
 	"github.com/adamjeanlaurent/LearningPathsApp/internal/security"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
 
@@ -22,14 +23,14 @@ func (handler *RequestHandlerClient) CreateAccountRequestHandler(c *fiber.Ctx) e
 	if err != nil {
 		response.ResponseCode = ResponseCode_GenericError
 		response.ErrorMessage = "Parsing error"
-		return SendResponse(response, fiber.StatusBadRequest, c)
+		return SendResponse(&response, fiber.StatusBadRequest, c)
 	}
 
 	queryResult := handler.DB.Where("email = ?", requestBody.Email).First(nil)
 
 	if queryResult.Error != nil {
 		response.ResponseCode = ResponseCode_AccountWithEmailAlreadyExists
-		return SendResponse(response, fiber.StatusOK, c)
+		return SendResponse(&response, fiber.StatusOK, c)
 	}
 
 	// TODO: check for valid email
@@ -39,17 +40,37 @@ func (handler *RequestHandlerClient) CreateAccountRequestHandler(c *fiber.Ctx) e
 	if err != nil {
 		response.ResponseCode = ResponseCode_GenericError
 		response.ErrorMessage = "Password hashing failed"
-		return SendResponse(response, fiber.StatusInternalServerError, c)
+		return SendResponse(&response, fiber.StatusInternalServerError, c)
 	}
 
-	user := models.User{Email: requestBody.Email, Hash: passwordHash}
+	user := models.User{
+		Email: requestBody.Email,
+		Hash:  passwordHash,
+		BaseModel: models.BaseModel{
+			StableId: uuid.New().String(),
+		},
+	}
+
 	var creationResult *gorm.DB = handler.DB.Create(&user)
 
 	if creationResult.Error != nil {
 		response.ResponseCode = ResponseCode_GenericError
 		response.ErrorMessage = "Failed to save user in DB"
-		return SendResponse(response, fiber.StatusInternalServerError, c)
+		return SendResponse(&response, fiber.StatusInternalServerError, c)
 	}
 
-	return SendResponse(response, fiber.StatusOK, c)
+	jwtToken, err := security.CreateNewJwt(user.StableId)
+
+	if err != nil {
+		response.ResponseCode = ResponseCode_GenericError
+		response.ErrorMessage = "Failed to generate jwt"
+		return SendResponse(&response, fiber.StatusInternalServerError, c)
+	}
+
+	c.Cookie(&fiber.Cookie{
+		Name:  "jwt",
+		Value: jwtToken,
+	})
+
+	return SendResponse(&response, fiber.StatusOK, c)
 }
