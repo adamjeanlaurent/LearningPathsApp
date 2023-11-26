@@ -5,8 +5,7 @@ import "github.com/jinzhu/gorm"
 type User struct {
 	BaseModel
 	Email         string `gorm:"not null"`
-	Password      string `gorm:"not null"`
-	Salt          string `gorm:"not null"`
+	Hash          string `gorm:"not null"`
 	LearningPaths []LearningPath
 }
 

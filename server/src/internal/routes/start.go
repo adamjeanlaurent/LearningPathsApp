@@ -52,7 +52,6 @@ func configureRoutes(app *fiber.App, handler *RequestHandlerClient) {
 
 	v1.Use(requestid.New())
 	v1.Use(logger.New(logger.Config{
-		// For more options, see the Config section
 		Format:   "${time}: ${locals:requestid} ${status} - ${method} ${path}\n",
 		Output:   os.Stdout,
 		TimeZone: "Local",

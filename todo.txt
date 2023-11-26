@@ -1,6 +1,6 @@
 
 MileStone 1:
-- Logging
+- Logging (DONE)
 - creating accounts
 - creating learning path
 - deleting learning path

@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 
+	"github.com/adamjeanlaurent/LearningPathsApp/internal/database/models"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 )
@@ -33,6 +34,10 @@ func ConnectAndSetup() (*gorm.DB, error) {
 	var dbConnectionError error
 
 	db, dbConnectionError = gorm.Open("mysql", getMySQLConnectionString(mysqlConfig))
+
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.LearningPath{})
+	db.AutoMigrate(&models.LearningPathStop{})
 
 	return db, dbConnectionError
 }
