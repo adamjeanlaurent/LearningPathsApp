@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// func authenicate() {
+// func authenicate(c *fiber.Ctx) error {
 
 // }
 

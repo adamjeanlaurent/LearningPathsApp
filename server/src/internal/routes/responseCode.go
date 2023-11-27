@@ -1,10 +1,9 @@
 package routes
 
-type ResponseCode int
+type ResponseCode string
 
 const (
-	ResponseCode_Success ResponseCode = iota
-	ResponseCode_AccountWithEmailAlreadyExists
-
-	ResponseCode_GenericError
+	ResponseCode_Success                       = "Success"
+	ResponseCode_AccountWithEmailAlreadyExists = "AccountWithEmailAlreadyExists"
+	ResponseCode_GenericError                  = "GenericError"
 )

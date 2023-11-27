@@ -1,13 +1,14 @@
 
 MileStone 1 Basic Server:
 - Logging (DONE)
-- creating accounts
+- creating accounts (DONE)
 - creating learning path
 - deleting learning path
 - create stop
 - deleting stop
 - Configuration with Env Vars
 - JWT tokens
+- login to account
 
 
 MileStore Basic UI:

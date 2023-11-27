@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	configuration "github.com/adamjeanlaurent/LearningPathsApp/internal/util"
+	"github.com/adamjeanlaurent/LearningPathsApp/internal/configuration"
 	"github.com/golang-jwt/jwt/v5"
 )
 

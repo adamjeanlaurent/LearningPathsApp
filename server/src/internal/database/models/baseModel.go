@@ -8,6 +8,7 @@ import (
 
 func beforeCreate(scope *gorm.Scope) error {
 	scope.SetColumn("CreatedDate", time.Now())
+	scope.SetColumn("UpdatedDate", time.Now())
 	return nil
 }
 
