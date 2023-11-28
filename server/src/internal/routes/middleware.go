@@ -4,12 +4,19 @@ import (
 	"encoding/json"
 	"log"
 
+	"github.com/adamjeanlaurent/LearningPathsApp/internal/security"
 	"github.com/gofiber/fiber/v2"
 )
 
-// func authenicate(c *fiber.Ctx) error {
+func validateJwtToken(c *fiber.Ctx, jwtToken string) (bool, error) {
+	stableId, err := security.ParseJwt(jwtToken)
+	if err != nil {
+		return false, err
+	}
 
-// }
+	c.Locals("userStableId", stableId)
+	return true, nil
+}
 
 func logRequestBody(c *fiber.Ctx) error {
 	body := make(map[string]interface{})
