@@ -8,14 +8,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func validateJwtToken(c *fiber.Ctx, jwtToken string) (bool, error) {
+func validateJwtToken(c *fiber.Ctx) error {
+	var jwtToken = c.Cookies("jwt")
 	stableId, err := security.ParseJwt(jwtToken)
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	c.Locals("userStableId", stableId)
-	return true, nil
+	return nil
 }
 
 func logRequestBody(c *fiber.Ctx) error {

@@ -20,8 +20,7 @@ func newBaseResponseBody() BaseResponseBody {
 }
 
 func parseRequestBody(out interface{}, c *fiber.Ctx) error {
-	var err error = c.BodyParser(&out)
-	return err
+	return c.BodyParser(&out)
 }
 
 func queryGetUserByEmail(db *gorm.DB, email string, user *models.User) *gorm.DB {
