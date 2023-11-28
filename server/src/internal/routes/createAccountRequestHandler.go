@@ -17,7 +17,7 @@ func (handler *RequestHandlerClient) createAccountRequestHandler(c *fiber.Ctx) e
 	}
 
 	var err error = parseRequestBody(&requestBody, c)
-	if err != nil {
+	if err != nil || requestBody.Email == "" || requestBody.Password == "" {
 		logger.LogError(err)
 		return sendResponse(&response, c, fiber.StatusBadRequest, ResponseCode_GenericError, "Parsing error")
 	}
