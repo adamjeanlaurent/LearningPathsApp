@@ -9,32 +9,31 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func (handler *RequestHandlerClient) CreateAccountRequestHandler(c *fiber.Ctx) error {
+func (handler *RequestHandlerClient) createAccountRequestHandler(c *fiber.Ctx) error {
 	var requestBody CreateAccountRequestBody
 
 	response := CreateAccountResponseBody{
-		BaseResponseBody: NewBaseResponseBody(),
+		BaseResponseBody: newBaseResponseBody(),
 	}
 
-	// Parse JSON from the request body
-	var err error = c.BodyParser(&requestBody)
+	var err error = parseRequestBody(&requestBody, c)
 	if err != nil {
 		logger.LogError(err)
-		return SendResponse(&response, c, fiber.StatusBadRequest, ResponseCode_GenericError, "Parsing error")
+		return sendResponse(&response, c, fiber.StatusBadRequest, ResponseCode_GenericError, "Parsing error")
 	}
 
 	existingUser := &models.User{}
 
-	queryResult := handler.DB.Where("email = ?", requestBody.Email).First(existingUser)
+	queryResult := queryGetUserByEmail(handler.DB, requestBody.Email, existingUser)
 
 	if queryResult.Error != nil && queryResult.Error != gorm.ErrRecordNotFound {
 		logger.LogError(queryResult.Error)
-		return SendResponse(&response, c, fiber.StatusOK, ResponseCode_AccountWithEmailAlreadyExists, "")
+		return sendResponse(&response, c, fiber.StatusOK, ResponseCode_AccountWithEmailAlreadyExists, "")
 	}
 
 	if existingUser.Email != "" {
 		response.ResponseCode = ResponseCode_AccountWithEmailAlreadyExists
-		return SendResponse(&response, c, fiber.StatusOK, ResponseCode_AccountWithEmailAlreadyExists, "")
+		return sendResponse(&response, c, fiber.StatusOK, ResponseCode_AccountWithEmailAlreadyExists, "")
 	}
 
 	// TODO: check for valid email
@@ -43,7 +42,7 @@ func (handler *RequestHandlerClient) CreateAccountRequestHandler(c *fiber.Ctx) e
 
 	if err != nil {
 		logger.LogError(err)
-		return SendResponse(&response, c, fiber.StatusInternalServerError, ResponseCode_GenericError, "Password hashing failed")
+		return sendResponse(&response, c, fiber.StatusInternalServerError, ResponseCode_GenericError, "Password hashing failed")
 	}
 
 	user := models.User{
@@ -58,7 +57,7 @@ func (handler *RequestHandlerClient) CreateAccountRequestHandler(c *fiber.Ctx) e
 
 	if creationResult.Error != nil {
 		logger.LogError(creationResult.Error)
-		return SendResponse(&response, c, fiber.StatusInternalServerError, ResponseCode_GenericError, "Failed to save user in DB")
+		return sendResponse(&response, c, fiber.StatusInternalServerError, ResponseCode_GenericError, "Failed to save user in DB")
 
 	}
 
@@ -66,7 +65,7 @@ func (handler *RequestHandlerClient) CreateAccountRequestHandler(c *fiber.Ctx) e
 
 	if err != nil {
 		logger.LogError(err)
-		return SendResponse(&response, c, fiber.StatusInternalServerError, ResponseCode_GenericError, "Failed to generate jwt")
+		return sendResponse(&response, c, fiber.StatusInternalServerError, ResponseCode_GenericError, "Failed to generate jwt")
 	}
 
 	c.Cookie(&fiber.Cookie{
@@ -74,5 +73,5 @@ func (handler *RequestHandlerClient) CreateAccountRequestHandler(c *fiber.Ctx) e
 		Value: jwtToken,
 	})
 
-	return SendResponse(&response, c, fiber.StatusOK, ResponseCode_Success, "")
+	return sendResponse(&response, c, fiber.StatusOK, ResponseCode_Success, "")
 }
