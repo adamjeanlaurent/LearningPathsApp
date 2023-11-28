@@ -6,6 +6,7 @@ import (
 
 	"github.com/adamjeanlaurent/LearningPathsApp/internal/database"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/keyauth"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 
@@ -27,9 +28,15 @@ func configureRoutes(app *fiber.App, handler *RequestHandlerClient) {
 	}))
 	v1.Use(logRequestBody)
 
-	var auth fiber.Router = v1.Group("/auth")
-	auth.Post("/createAccount", handler.createAccountRequestHandler)
-	auth.Get("/loginToAccount", handler.loginToAccountRequestHandler)
+	var authRouter fiber.Router = v1.Group("/auth")
+	authRouter.Post("/createAccount", handler.createAccountRequestHandler)
+	authRouter.Get("/loginToAccount", handler.loginToAccountRequestHandler)
+
+	var learningPathRouter fiber.Router = v1.Group("/learningPath")
+	learningPathRouter.Use(keyauth.New(keyauth.Config{
+		KeyLookup: "cookie:jwt",
+		Validator: validateJwtToken,
+	}))
 }
 
 func RunServer() {
