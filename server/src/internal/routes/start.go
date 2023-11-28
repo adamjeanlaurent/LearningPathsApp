@@ -27,7 +27,9 @@ func configureRoutes(app *fiber.App, handler *RequestHandlerClient) {
 	}))
 	v1.Use(logRequestBody)
 
-	v1.Get("/createAccount", handler.CreateAccountRequestHandler)
+	var auth fiber.Router = v1.Group("/auth")
+	auth.Post("/createAccount", handler.createAccountRequestHandler)
+	auth.Get("/loginToAccount", handler.loginToAccountRequestHandler)
 }
 
 func RunServer() {
