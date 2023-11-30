@@ -5,7 +5,6 @@ import (
 	"github.com/adamjeanlaurent/LearningPathsApp/internal/logger"
 	"github.com/adamjeanlaurent/LearningPathsApp/internal/security"
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
 
@@ -19,12 +18,12 @@ func (handler *RequestHandlerClient) createAccountRequestHandler(c *fiber.Ctx) e
 	var err error = parseRequestBody(&requestBody, c)
 	if err != nil || requestBody.Email == "" || requestBody.Password == "" {
 		logger.LogError(err)
-		return sendResponse(&response, c, fiber.StatusBadRequest, ResponseCode_GenericError, "Parsing error")
+		return sendParsingErrorResponse(&response, c)
 	}
 
-	existingUser := &models.User{}
+	existingUser := models.User{}
 
-	queryResult := queryGetUserByEmail(handler.DB, requestBody.Email, existingUser)
+	queryResult := queryGetUserByEmail(handler.DB, requestBody.Email, &existingUser)
 
 	if queryResult.Error != nil && queryResult.Error != gorm.ErrRecordNotFound {
 		logger.LogError(queryResult.Error)
@@ -42,30 +41,27 @@ func (handler *RequestHandlerClient) createAccountRequestHandler(c *fiber.Ctx) e
 
 	if err != nil {
 		logger.LogError(err)
-		return sendResponse(&response, c, fiber.StatusInternalServerError, ResponseCode_GenericError, "Password hashing failed")
+		return sendInternalServerError(&response, c, "Password hashing failed")
 	}
 
 	user := models.User{
-		Email: requestBody.Email,
-		Hash:  passwordHash,
-		BaseModel: models.BaseModel{
-			StableId: uuid.New().String(),
-		},
+		Email:     requestBody.Email,
+		Hash:      passwordHash,
+		BaseModel: models.NewBaseModel(),
 	}
 
 	var creationResult *gorm.DB = handler.DB.Create(&user)
 
 	if creationResult.Error != nil {
 		logger.LogError(creationResult.Error)
-		return sendResponse(&response, c, fiber.StatusInternalServerError, ResponseCode_GenericError, "Failed to save user in DB")
-
+		return sendInternalServerError(&response, c, "Failed to save user in DB")
 	}
 
-	jwtToken, err := security.CreateNewJwt(user.StableId)
+	jwtToken, err := security.CreateNewJwt(user.StableId, user.ID)
 
 	if err != nil {
 		logger.LogError(err)
-		return sendResponse(&response, c, fiber.StatusInternalServerError, ResponseCode_GenericError, "Failed to generate jwt")
+		return sendInternalServerError(&response, c, "Failed to generate Jwt")
 	}
 
 	c.Cookie(&fiber.Cookie{
@@ -73,5 +69,5 @@ func (handler *RequestHandlerClient) createAccountRequestHandler(c *fiber.Ctx) e
 		Value: jwtToken,
 	})
 
-	return sendResponse(&response, c, fiber.StatusOK, ResponseCode_Success, "")
+	return sendSuccess(&response, c)
 }

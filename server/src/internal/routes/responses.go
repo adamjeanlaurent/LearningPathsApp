@@ -25,3 +25,7 @@ type CreateAccountResponseBody struct {
 type LoginToAccountResponseBody struct {
 	BaseResponseBody
 }
+
+type CreateLearningPathResponseBody struct {
+	BaseResponseBody
+}

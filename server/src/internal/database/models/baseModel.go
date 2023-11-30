@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 )
 
@@ -22,4 +23,10 @@ type BaseModel struct {
 	StableId    string    `gorm:"not null"`
 	CreatedDate time.Time `gorm:"not null"`
 	UpdatedDate time.Time ``
+}
+
+func NewBaseModel() BaseModel {
+	return BaseModel{
+		StableId: uuid.New().String(),
+	}
 }

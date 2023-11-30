@@ -10,12 +10,13 @@ import (
 
 func validateJwtToken(c *fiber.Ctx) error {
 	var jwtToken = c.Cookies("jwt")
-	stableId, err := security.ParseJwt(jwtToken)
+	stableId, userTableId, err := security.ParseJwt(jwtToken)
 	if err != nil {
 		return err
 	}
 
 	c.Locals("userStableId", stableId)
+	c.Locals("userTableID", userTableId)
 	return nil
 }
 

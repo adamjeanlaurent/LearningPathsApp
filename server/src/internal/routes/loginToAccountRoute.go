@@ -17,7 +17,7 @@ func (handler *RequestHandlerClient) loginToAccountRequestHandler(c *fiber.Ctx) 
 	var err error = parseRequestBody(&requestBody, c)
 	if err != nil || requestBody.Email == "" || requestBody.Password == "" {
 		logger.LogError(err)
-		return sendResponse(&response, c, fiber.StatusBadRequest, ResponseCode_GenericError, "Parsing error")
+		return sendParsingErrorResponse(&response, c)
 	}
 
 	existingUser := &models.User{}
@@ -35,10 +35,10 @@ func (handler *RequestHandlerClient) loginToAccountRequestHandler(c *fiber.Ctx) 
 		return sendResponse(&response, c, fiber.StatusUnauthorized, ResponseCode_GenericError, "")
 	}
 
-	jwtToken, err := security.CreateNewJwt(existingUser.StableId)
+	jwtToken, err := security.CreateNewJwt(existingUser.StableId, existingUser.ID)
 	if err != nil {
 		logger.LogError(err)
-		return sendResponse(&response, c, fiber.StatusInternalServerError, ResponseCode_GenericError, "Failed to generate jwt")
+		return sendInternalServerError(&response, c, "Failed to generate Jwt")
 	}
 
 	c.Cookie(&fiber.Cookie{
@@ -46,5 +46,5 @@ func (handler *RequestHandlerClient) loginToAccountRequestHandler(c *fiber.Ctx) 
 		Value: jwtToken,
 	})
 
-	return sendResponse(&response, c, fiber.StatusOK, ResponseCode_Success, "")
+	return sendSuccess(&response, c)
 }
