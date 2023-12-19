@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Directory where your Go project is located
-project_dir="./src/cmd/main"
+project_dir="./src/"
 
 # Directory where you want to run go build
 build_dir="../../../bin"

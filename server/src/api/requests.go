@@ -1,4 +1,4 @@
-package routes
+package api
 
 type CreateAccountRequestBody struct {
 	Email    string `json:"email"`
@@ -8,4 +8,8 @@ type CreateAccountRequestBody struct {
 type LoginToAccountRequestBody struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+}
+
+type CreateLearningPathRequestBody struct {
+	Title string `json:title`
 }
