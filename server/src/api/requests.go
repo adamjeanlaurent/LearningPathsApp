@@ -1,4 +1,4 @@
-package routes
+package api
 
 type CreateAccountRequestBody struct {
 	Email    string `json:"email"`

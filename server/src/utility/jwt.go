@@ -1,15 +1,11 @@
-package security
+package utility
 
 import (
 	"errors"
 	"time"
 
-	"github.com/adamjeanlaurent/LearningPathsApp/internal/configuration"
 	"github.com/golang-jwt/jwt/v5"
 )
-
-// Create the JWT key used to create the signature
-var jwtKey = []byte(configuration.GetJwtSecretKey())
 
 const jwtExpiryTime time.Duration = time.Hour * 24
 
@@ -19,7 +15,7 @@ type JwtClaims struct {
 	jwt.RegisteredClaims
 }
 
-func CreateNewJwt(stableId string, userID uint) (string, error) {
+func CreateNewJwt(stableId string, userID uint, jwtKey []byte) (string, error) {
 	var expirationTime time.Time = time.Now().Add(jwtExpiryTime)
 
 	claims := &JwtClaims{
@@ -41,7 +37,7 @@ func CreateNewJwt(stableId string, userID uint) (string, error) {
 	return tokenString, nil
 }
 
-func ParseJwt(tokenString string) (string, uint, error) {
+func ParseJwt(tokenString string, jwtKey []byte) (string, uint, error) {
 	claims := &JwtClaims{}
 
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (any, error) {

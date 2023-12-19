@@ -1,11 +1,9 @@
-package routes
+package api
 
 import (
 	"errors"
 
-	"github.com/adamjeanlaurent/LearningPathsApp/internal/database/models"
 	"github.com/gofiber/fiber/v2"
-	"github.com/jinzhu/gorm"
 )
 
 func sendParsingErrorResponse(responseBody IBaseResponseBody, c *fiber.Ctx) error {
@@ -26,8 +24,8 @@ func sendResponse(responseBody IBaseResponseBody, c *fiber.Ctx, httpStatus int, 
 	return c.Status(httpStatus).JSON(responseBody)
 }
 
-func newBaseResponseBody() BaseResponseBody {
-	return BaseResponseBody{
+func newBaseResponseBody() *BaseResponseBody {
+	return &BaseResponseBody{
 		ErrorMessage: "",
 		ResponseCode: ResponseCode_Success,
 	}
@@ -35,10 +33,6 @@ func newBaseResponseBody() BaseResponseBody {
 
 func parseRequestBody(out interface{}, c *fiber.Ctx) error {
 	return c.BodyParser(&out)
-}
-
-func queryGetUserByEmail(db *gorm.DB, email string, user *models.User) *gorm.DB {
-	return db.Where("email = ?", email).First(user)
 }
 
 func getUserStableIDFromContext(c *fiber.Ctx) (string, error) {

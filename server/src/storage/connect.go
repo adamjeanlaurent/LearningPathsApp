@@ -1,9 +1,8 @@
-package database
+package storage
 
 import (
 	"fmt"
 
-	"github.com/adamjeanlaurent/LearningPathsApp/internal/database/models"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 )
@@ -21,7 +20,7 @@ func getMySQLConnectionString(config mySQLConfig) string {
 		config.Username, config.Password, config.Host, config.Port, config.Database)
 }
 
-func ConnectAndSetup() (*gorm.DB, error) {
+func (store *MySqlStore) Connect() error {
 	mysqlConfig := mySQLConfig{
 		Username: "root",
 		Password: "root1234",
@@ -35,9 +34,11 @@ func ConnectAndSetup() (*gorm.DB, error) {
 
 	db, dbConnectionError = gorm.Open("mysql", getMySQLConnectionString(mysqlConfig))
 
-	db.AutoMigrate(&models.User{})
-	db.AutoMigrate(&models.LearningPath{})
-	db.AutoMigrate(&models.LearningPathStop{})
+	db.AutoMigrate(&User{})
+	db.AutoMigrate(&LearningPath{})
+	db.AutoMigrate(&LearningPathStop{})
 
-	return db, dbConnectionError
+	store.db = db
+
+	return dbConnectionError
 }

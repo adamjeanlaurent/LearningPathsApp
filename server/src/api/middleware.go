@@ -1,16 +1,16 @@
-package routes
+package api
 
 import (
 	"encoding/json"
 	"log"
 
-	"github.com/adamjeanlaurent/LearningPathsApp/internal/security"
+	"github.com/adamjeanlaurent/LearningPathsApp/utility"
 	"github.com/gofiber/fiber/v2"
 )
 
 func validateJwtToken(c *fiber.Ctx) error {
 	var jwtToken = c.Cookies("jwt")
-	stableId, userTableId, err := security.ParseJwt(jwtToken)
+	stableId, userTableId, err := utility.ParseJwt(jwtToken)
 	if err != nil {
 		return err
 	}
