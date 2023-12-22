@@ -9,9 +9,6 @@ import (
 
 type Server interface {
 	ConnectAndRun()
-	handleCreateAccount(c *fiber.Ctx) error
-	handleLogin(c *fiber.Ctx) error
-	handleCreateLearningPath(c *fiber.Ctx) error
 }
 
 type ApiServer struct {
@@ -86,33 +83,6 @@ func (server *ApiServer) handleCreateAccount(c *fiber.Ctx) error {
 	return sendSuccess(response, c)
 }
 
-func (server *ApiServer) handleCreateLearningPath(c *fiber.Ctx) error {
-	var requestBody CreateLearningPathRequestBody
-
-	response := NewCreateLearningPathResponseBody()
-
-	var err error = parseRequestBody(&requestBody, c)
-	if err != nil || requestBody.Title == "" {
-		utility.LogError(err)
-		return sendParsingErrorResponse(response, c)
-	}
-
-	userTableID, err := getUserTableIDFromContext(c)
-	if err != nil {
-		utility.LogError(err)
-		return sendInternalServerError(response, c, "invalid table ID")
-	}
-
-	creationResult, _ := server.store.CreateLearningPath(requestBody.Title, userTableID)
-
-	if creationResult.Error != nil {
-		utility.LogError(creationResult.Error)
-		return sendInternalServerError(response, c, "Failed to save learning path in DB")
-	}
-
-	return sendSuccess(response, c)
-}
-
 func (server *ApiServer) handleLogin(c *fiber.Ctx) error {
 	var requestBody LoginToAccountRequestBody
 
@@ -149,6 +119,71 @@ func (server *ApiServer) handleLogin(c *fiber.Ctx) error {
 		Name:  "jwt",
 		Value: jwtToken,
 	})
+
+	return sendSuccess(response, c)
+}
+
+func (server *ApiServer) handleCreateLearningPath(c *fiber.Ctx) error {
+	var requestBody CreateLearningPathRequestBody
+
+	response := NewCreateLearningPathResponseBody()
+
+	var err error = parseRequestBody(&requestBody, c)
+	if err != nil || requestBody.Title == "" {
+		utility.LogError(err)
+		return sendParsingErrorResponse(response, c)
+	}
+
+	userTableID, err := getUserTableIDFromContext(c)
+	if err != nil {
+		utility.LogError(err)
+		return sendInternalServerError(response, c, "invalid table ID")
+	}
+
+	creationResult, _ := server.store.CreateLearningPath(requestBody.Title, userTableID)
+
+	if creationResult.Error != nil {
+		utility.LogError(creationResult.Error)
+		return sendInternalServerError(response, c, "Failed to save learning path in DB")
+	}
+
+	return sendSuccess(response, c)
+}
+
+func (server *ApiServer) handleCreateLearningPathStop(c *fiber.Ctx) error {
+	var requestBody CreateLearningPathStopRequestBody
+
+	var response *CreateLearningPathStopResponseBody = NewCreateLearningPathStopResponseBody()
+
+	var err error = parseRequestBody(&requestBody, c)
+	if err != nil {
+		utility.LogError(err)
+		return sendParsingErrorResponse(response, c)
+	}
+
+	userTableID, err := getUserTableIDFromContext(c)
+	if err != nil {
+		utility.LogError(err)
+		return sendInternalServerError(response, c, "invalid table ID")
+	}
+
+	// get the learning path
+	queryResult, learningPath := server.store.GetLearningPathByID(userTableID, requestBody.LearningPathID)
+	if queryResult.Error != nil {
+		utility.LogError(queryResult.Error)
+		return sendInternalServerError(response, c, "Failed to get learning path in DB")
+	}
+
+	var stop *storage.LearningPathStop = storage.NewLearningPathStop()
+	stop.MarkdownBody = requestBody.MarkdownBody
+	stop.StopNumber = requestBody.Stop
+	stop.Title = requestBody.Title
+
+	var assoc *gorm.Association = server.store.AddStopToLearningPath(learningPath, stop)
+	if assoc.Error != nil {
+		utility.LogError(assoc.Error)
+		return sendInternalServerError(response, c, "Failed to save learning path stop in DB")
+	}
 
 	return sendSuccess(response, c)
 }

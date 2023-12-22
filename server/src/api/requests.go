@@ -11,5 +11,12 @@ type LoginToAccountRequestBody struct {
 }
 
 type CreateLearningPathRequestBody struct {
-	Title string `json:title`
+	Title string `json:"title"`
+}
+
+type CreateLearningPathStopRequestBody struct {
+	Title          string `json:"title"`
+	LearningPathID uint   `json:"learningPathId"`
+	MarkdownBody   string `json:"body"`
+	Stop           uint   `json:"stopNumber"`
 }

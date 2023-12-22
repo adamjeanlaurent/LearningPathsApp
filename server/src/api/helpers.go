@@ -24,13 +24,6 @@ func sendResponse(responseBody IBaseResponseBody, c *fiber.Ctx, httpStatus int, 
 	return c.Status(httpStatus).JSON(responseBody)
 }
 
-func newBaseResponseBody() *BaseResponseBody {
-	return &BaseResponseBody{
-		ErrorMessage: "",
-		ResponseCode: ResponseCode_Success,
-	}
-}
-
 func parseRequestBody(out interface{}, c *fiber.Ctx) error {
 	return c.BodyParser(&out)
 }
