@@ -5,10 +5,10 @@ import "github.com/jinzhu/gorm"
 type Store interface {
 	Connect() error
 	GetUserByEmail(email string, user *User) *gorm.DB
-	CreateUser(email string, passwordHash string) (*gorm.DB, *User)
-	CreateLearningPath(title string, userID uint) (*gorm.DB, *LearningPath)
-	GetLearningPathByID(userID uint, learningPathID uint) (*gorm.DB, *LearningPath)
-	AddStopToLearningPath(path *LearningPath, stop *LearningPathStop) *gorm.Association
+	CreateUser(email string, passwordHash string) (*User, error)
+	CreateLearningPath(title string, userID uint) (*LearningPath, error)
+	GetLearningPathByID(userID uint, learningPathID uint) (*LearningPath, error)
+	AddStopToLearningPath(path *LearningPath, stop *LearningPathStop) error
 }
 
 type MySqlStore struct {
@@ -23,17 +23,17 @@ func (store *MySqlStore) GetUserByEmail(email string, user *User) *gorm.DB {
 	return store.db.Where("email = ?", email).First(user)
 }
 
-func (store *MySqlStore) CreateUser(email string, passwordHash string) (*gorm.DB, *User) {
+func (store *MySqlStore) CreateUser(email string, passwordHash string) (*User, error) {
 	user := User{
 		Email:     email,
 		Hash:      passwordHash,
 		BaseModel: *NewBaseModel(),
 	}
 
-	return store.db.Create(&user), &user
+	return &user, store.db.Create(&user).Error
 }
 
-func (store *MySqlStore) CreateLearningPath(title string, userID uint) (*gorm.DB, *LearningPath) {
+func (store *MySqlStore) CreateLearningPath(title string, userID uint) (*LearningPath, error) {
 
 	learningPath := LearningPath{
 		Title:     title,
@@ -41,15 +41,16 @@ func (store *MySqlStore) CreateLearningPath(title string, userID uint) (*gorm.DB
 		BaseModel: *NewBaseModel(),
 	}
 
-	return store.db.Create(&learningPath), &learningPath
+	return &learningPath, store.db.Create(&learningPath).Error
 }
 
-func (store *MySqlStore) GetLearningPathByID(userID uint, learningPathID uint) (*gorm.DB, *LearningPath) {
+func (store *MySqlStore) GetLearningPathByID(userID uint, learningPathID uint) (*LearningPath, error) {
 	learningPath := LearningPath{}
 
-	return store.db.Where("userID = ? AND learningPathID = ?", userID, learningPathID).First(&learningPath), &learningPath
+	return &learningPath, store.db.Where("userID = ? AND learningPathID = ?", userID, learningPathID).First(&learningPath).Error
 }
 
-func (store *MySqlStore) AddStopToLearningPath(path *LearningPath, stop *LearningPathStop) *gorm.Association {
-	return store.db.Model(&path).Association("Stops").Append(&stop)
+func (store *MySqlStore) AddStopToLearningPath(path *LearningPath, stop *LearningPathStop) error {
+	var assoc *gorm.Association = store.db.Model(&path).Association("Stops").Append(&stop)
+	return assoc.Error
 }

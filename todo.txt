@@ -3,20 +3,19 @@ MileStone 1 Basic Server:
 - Logging (DONE)
 - creating accounts (DONE)
 - creating learning path (DONE)
-- creating learning path stop
-- deleting learning path
-- deleting stop
-- Configuration with Env Vars
-- JWT tokens
+- creating learning path stop (DONE)
+- Configuration with Env Vars (DONE)
+- JWT tokens (DONE)
 - login to account (DONE)
 
 
-MileStone 2 Basic UI:
-- 
-
-MileStone 3 Better Server:
+MileStone 2 Better Server:
 - delete account
 - delete stop
 - delete path
 - edit path
 - edit stop
+
+
+MileStone 3 Basic UI:
+- 

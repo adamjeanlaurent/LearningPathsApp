@@ -61,10 +61,10 @@ func (server *ApiServer) handleCreateAccount(c *fiber.Ctx) error {
 		return sendInternalServerError(response, c, "Password hashing failed")
 	}
 
-	creationResult, user := server.store.CreateUser(requestBody.Email, passwordHash)
+	user, err := server.store.CreateUser(requestBody.Email, passwordHash)
 
-	if creationResult.Error != nil {
-		utility.LogError(creationResult.Error)
+	if err != nil {
+		utility.LogError(err)
 		return sendInternalServerError(response, c, "Failed to save user in DB")
 	}
 
@@ -140,10 +140,10 @@ func (server *ApiServer) handleCreateLearningPath(c *fiber.Ctx) error {
 		return sendInternalServerError(response, c, "invalid table ID")
 	}
 
-	creationResult, _ := server.store.CreateLearningPath(requestBody.Title, userTableID)
+	_, err = server.store.CreateLearningPath(requestBody.Title, userTableID)
 
-	if creationResult.Error != nil {
-		utility.LogError(creationResult.Error)
+	if err != nil {
+		utility.LogError(err)
 		return sendInternalServerError(response, c, "Failed to save learning path in DB")
 	}
 
@@ -168,9 +168,9 @@ func (server *ApiServer) handleCreateLearningPathStop(c *fiber.Ctx) error {
 	}
 
 	// get the learning path
-	queryResult, learningPath := server.store.GetLearningPathByID(userTableID, requestBody.LearningPathID)
-	if queryResult.Error != nil {
-		utility.LogError(queryResult.Error)
+	learningPath, err := server.store.GetLearningPathByID(userTableID, requestBody.LearningPathID)
+	if err != nil {
+		utility.LogError(err)
 		return sendInternalServerError(response, c, "Failed to get learning path in DB")
 	}
 
@@ -179,9 +179,9 @@ func (server *ApiServer) handleCreateLearningPathStop(c *fiber.Ctx) error {
 	stop.StopNumber = requestBody.Stop
 	stop.Title = requestBody.Title
 
-	var assoc *gorm.Association = server.store.AddStopToLearningPath(learningPath, stop)
-	if assoc.Error != nil {
-		utility.LogError(assoc.Error)
+	err = server.store.AddStopToLearningPath(learningPath, stop)
+	if err != nil {
+		utility.LogError(err)
 		return sendInternalServerError(response, c, "Failed to save learning path stop in DB")
 	}
 
