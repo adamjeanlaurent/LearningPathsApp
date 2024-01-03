@@ -8,14 +8,24 @@ MileStone 1 Basic Server:
 - JWT tokens (DONE)
 - login to account (DONE)
 
-
 MileStone 2 Better Server:
-- delete account
+- better create learning path stop (DONE)
+- use uuids
 - delete stop
 - delete path
-- edit path
-- edit stop
-
+- edit path body (DONE)
+- edit path Title (DONE)
+- edit stop Title (DONE)
+- move stop
+- delete account
+- get learning paths
+- get learning paths for stop
+- get account
+- logout
 
 MileStone 3 Basic UI:
 - 
+
+MileStone 4 Robust Server:
+- better validation middleware to avoid boilerplate
+- search

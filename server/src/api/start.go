@@ -29,10 +29,13 @@ func configureRoutes(server *ApiServer) {
 	var learningPathRouter fiber.Router = v1.Group("/learningPath")
 	learningPathRouter.Use(server.validateJwtToken)
 	learningPathRouter.Post("/create", server.handleCreateLearningPath)
+	learningPathRouter.Post("/update/title", server.handleSetLearningPathTitle)
 
 	var learningPathStopRouter fiber.Router = v1.Group("/learningPathStop")
 	learningPathStopRouter.Use(server.validateJwtToken)
 	learningPathStopRouter.Post("/create", server.handleCreateLearningPathStop)
+	learningPathStopRouter.Post("/update/title", server.handleSetLearningPathStopTitle)
+	learningPathStopRouter.Post("/update/body", server.handleSetLearningPathStopBody)
 }
 
 func (server *ApiServer) ConnectAndRun() {

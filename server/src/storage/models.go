@@ -62,7 +62,8 @@ func NewLearningPathStop() *LearningPathStop {
 
 type LearningPath struct {
 	BaseModel
-	UserID uint
-	Title  string
-	Stops  []LearningPathStop
+	UserID         uint
+	Title          string
+	Stops          []LearningPathStop
+	NextStopNumber uint
 }

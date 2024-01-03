@@ -64,3 +64,33 @@ func NewCreateLearningPathStopResponseBody() *CreateLearningPathStopResponseBody
 		BaseResponseBody: newBaseResponseBody(),
 	}
 }
+
+type SetLearningPathTitleResponseBody struct {
+	*BaseResponseBody
+}
+
+func NewSetLearningPathTitleResponseBody() *SetLearningPathTitleResponseBody {
+	return &SetLearningPathTitleResponseBody{
+		BaseResponseBody: newBaseResponseBody(),
+	}
+}
+
+type SetLearningPathStopTitleResponseBody struct {
+	*BaseResponseBody
+}
+
+func NewSetLearningPathStopTitleResponseBody() *SetLearningPathStopTitleResponseBody {
+	return &SetLearningPathStopTitleResponseBody{
+		BaseResponseBody: newBaseResponseBody(),
+	}
+}
+
+type SetLearningPathStopBodyResponseBody struct {
+	*BaseResponseBody
+}
+
+func NewSetLearningPathStopBodyResponseBody() *SetLearningPathStopBodyResponseBody {
+	return &SetLearningPathStopBodyResponseBody{
+		BaseResponseBody: newBaseResponseBody(),
+	}
+}

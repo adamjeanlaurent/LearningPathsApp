@@ -7,14 +7,10 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type Server interface {
-	ConnectAndRun()
-}
-
 type ApiServer struct {
 	port   string
-	store  storage.Store
-	config utility.Configuration
+	store  *storage.MySqlStore
+	config *utility.ServerConfiguration
 	app    *fiber.App
 }
 
@@ -123,6 +119,102 @@ func (server *ApiServer) handleLogin(c *fiber.Ctx) error {
 	return sendSuccess(response, c)
 }
 
+func (server *ApiServer) handleSetLearningPathStopBody(c *fiber.Ctx) error {
+	var requestBody SetLearningPathStopBodyRequestBody
+
+	var response *SetLearningPathStopTitleResponseBody = NewSetLearningPathStopTitleResponseBody()
+
+	var err error = parseRequestBody(&requestBody, c)
+	if err != nil {
+		utility.LogError(err)
+		return sendParsingErrorResponse(response, c)
+	}
+
+	userTableID, err := getUserTableIDFromContext(c)
+	if err != nil {
+		utility.LogError(err)
+		return sendInternalServerError(response, c, "invalid table ID")
+	}
+
+	stop, err := server.store.GetLearningPathStopByID(userTableID, requestBody.LearningPathStopID)
+	if err != nil {
+		utility.LogError(err)
+		return sendInternalServerError(response, c, "failed to get learning path stop")
+	}
+
+	err = server.store.SetLearningPathStopBody(stop, requestBody.Body)
+	if err != nil {
+		utility.LogError(err)
+		return sendInternalServerError(response, c, "failed to update learning path stop body")
+	}
+
+	return sendSuccess(response, c)
+}
+
+func (server *ApiServer) handleSetLearningPathStopTitle(c *fiber.Ctx) error {
+	var requestBody SetLearningPathStopTitleRequestBody
+
+	response := NewSetLearningPathStopTitleResponseBody()
+
+	var err error = parseRequestBody(&requestBody, c)
+	if err != nil {
+		utility.LogError(err)
+		return sendParsingErrorResponse(response, c)
+	}
+
+	userTableID, err := getUserTableIDFromContext(c)
+	if err != nil {
+		utility.LogError(err)
+		return sendInternalServerError(response, c, "invalid table ID")
+	}
+
+	stop, err := server.store.GetLearningPathStopByID(userTableID, requestBody.LearningPathStopID)
+	if err != nil {
+		utility.LogError(err)
+		return sendInternalServerError(response, c, "failed to get learning path stop")
+	}
+
+	err = server.store.SetLearningPathStopTitle(stop, requestBody.Title)
+	if err != nil {
+		utility.LogError(err)
+		return sendInternalServerError(response, c, "failed to update learning path stop title")
+	}
+
+	return sendSuccess(response, c)
+}
+
+func (server *ApiServer) handleSetLearningPathTitle(c *fiber.Ctx) error {
+	var requestBody SetLearningPathTitleRequestBody
+
+	response := NewSetLearningPathTitleResponseBody()
+
+	var err error = parseRequestBody(&requestBody, c)
+	if err != nil {
+		utility.LogError(err)
+		return sendParsingErrorResponse(response, c)
+	}
+
+	userTableID, err := getUserTableIDFromContext(c)
+	if err != nil {
+		utility.LogError(err)
+		return sendInternalServerError(response, c, "invalid table ID")
+	}
+
+	learningPath, err := server.store.GetLearningPathByID(userTableID, requestBody.LearningPathID)
+	if err != nil {
+		utility.LogError(err)
+		return sendInternalServerError(response, c, "failed to get learning path")
+	}
+
+	err = server.store.SetLearningPathTitle(learningPath, requestBody.Title)
+	if err != nil {
+		utility.LogError(err)
+		return sendInternalServerError(response, c, "failed to update learning path title")
+	}
+
+	return sendSuccess(response, c)
+}
+
 func (server *ApiServer) handleCreateLearningPath(c *fiber.Ctx) error {
 	var requestBody CreateLearningPathRequestBody
 
@@ -172,6 +264,13 @@ func (server *ApiServer) handleCreateLearningPathStop(c *fiber.Ctx) error {
 	if err != nil {
 		utility.LogError(err)
 		return sendInternalServerError(response, c, "Failed to get learning path in DB")
+	}
+
+	// increment the next stop number
+	err = server.store.IncrementStopCount(learningPath)
+	if err != nil {
+		utility.LogError(err)
+		return sendInternalServerError(response, c, "Failed to increment stop count")
 	}
 
 	var stop *storage.LearningPathStop = storage.NewLearningPathStop()

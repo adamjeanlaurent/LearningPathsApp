@@ -2,11 +2,6 @@ package utility
 
 import "os"
 
-type Configuration interface {
-	GetEnvironment() string
-	GetJwtSecretKey() []byte
-}
-
 type ServerConfiguration struct {
 	environment  string
 	jwtSecretKey string

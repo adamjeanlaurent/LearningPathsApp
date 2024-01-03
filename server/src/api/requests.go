@@ -20,3 +20,18 @@ type CreateLearningPathStopRequestBody struct {
 	MarkdownBody   string `json:"body"`
 	Stop           uint   `json:"stopNumber"`
 }
+
+type SetLearningPathTitleRequestBody struct {
+	Title          string `json:"title"`
+	LearningPathID uint   `json:"learningPathId"`
+}
+
+type SetLearningPathStopTitleRequestBody struct {
+	Title              string `json:"title"`
+	LearningPathStopID uint   `json:"learningPathStopId"`
+}
+
+type SetLearningPathStopBodyRequestBody struct {
+	Body               string `json:"body"`
+	LearningPathStopID uint   `json:"learningPathStopId"`
+}
