@@ -3,13 +3,29 @@ MileStone 1 Basic Server:
 - Logging (DONE)
 - creating accounts (DONE)
 - creating learning path (DONE)
-- deleting learning path
-- create stop
-- deleting stop
-- Configuration with Env Vars
-- JWT tokens
+- creating learning path stop (DONE)
+- Configuration with Env Vars (DONE)
+- JWT tokens (DONE)
 - login to account (DONE)
 
+MileStone 2 Better Server:
+- better create learning path stop (DONE)
+- use uuids
+- delete stop
+- delete path
+- edit path body (DONE)
+- edit path Title (DONE)
+- edit stop Title (DONE)
+- move stop
+- delete account
+- get learning paths
+- get learning paths for stop
+- get account
+- logout
 
-MileStore Basic UI:
+MileStone 3 Basic UI:
 - 
+
+MileStone 4 Robust Server:
+- better validation middleware to avoid boilerplate
+- search

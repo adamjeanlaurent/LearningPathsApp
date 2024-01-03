@@ -8,9 +8,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func validateJwtToken(c *fiber.Ctx) error {
+func (server *ApiServer) validateJwtToken(c *fiber.Ctx) error {
 	var jwtToken = c.Cookies("jwt")
-	stableId, userTableId, err := utility.ParseJwt(jwtToken)
+	stableId, userTableId, err := utility.ParseJwt(jwtToken, server.config.GetJwtSecretKey())
 	if err != nil {
 		return err
 	}
@@ -20,7 +20,7 @@ func validateJwtToken(c *fiber.Ctx) error {
 	return nil
 }
 
-func logRequestBody(c *fiber.Ctx) error {
+func (server *ApiServer) logRequestBody(c *fiber.Ctx) error {
 	body := make(map[string]interface{})
 
 	// Read the request body

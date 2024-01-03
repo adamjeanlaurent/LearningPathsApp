@@ -20,14 +20,22 @@ func configureRoutes(server *ApiServer) {
 		Output:   os.Stdout,
 		TimeZone: "Local",
 	}))
-	v1.Use(logRequestBody)
+	v1.Use(server.logRequestBody)
 
 	var authRouter fiber.Router = v1.Group("/auth")
 	authRouter.Post("/createAccount", server.handleCreateAccount)
 	authRouter.Get("/loginToAccount", server.handleLogin)
 
 	var learningPathRouter fiber.Router = v1.Group("/learningPath")
-	learningPathRouter.Use(validateJwtToken)
+	learningPathRouter.Use(server.validateJwtToken)
+	learningPathRouter.Post("/create", server.handleCreateLearningPath)
+	learningPathRouter.Post("/update/title", server.handleSetLearningPathTitle)
+
+	var learningPathStopRouter fiber.Router = v1.Group("/learningPathStop")
+	learningPathStopRouter.Use(server.validateJwtToken)
+	learningPathStopRouter.Post("/create", server.handleCreateLearningPathStop)
+	learningPathStopRouter.Post("/update/title", server.handleSetLearningPathStopTitle)
+	learningPathStopRouter.Post("/update/body", server.handleSetLearningPathStopBody)
 }
 
 func (server *ApiServer) ConnectAndRun() {

@@ -51,12 +51,19 @@ type LearningPathStop struct {
 	LearningPathID uint
 	Title          string
 	MarkdownBody   string
-	StopNumber     string
+	StopNumber     uint
+}
+
+func NewLearningPathStop() *LearningPathStop {
+	return &LearningPathStop{
+		BaseModel: *NewBaseModel(),
+	}
 }
 
 type LearningPath struct {
 	BaseModel
-	UserID uint
-	Title  string
-	Stops  []LearningPathStop
+	UserID         uint
+	Title          string
+	Stops          []LearningPathStop
+	NextStopNumber uint
 }

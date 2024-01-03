@@ -18,6 +18,13 @@ func (r *BaseResponseBody) SetErrorMessage(message string) {
 	r.ErrorMessage = message
 }
 
+func newBaseResponseBody() *BaseResponseBody {
+	return &BaseResponseBody{
+		ErrorMessage: "",
+		ResponseCode: ResponseCode_Success,
+	}
+}
+
 type CreateAccountResponseBody struct {
 	*BaseResponseBody
 }
@@ -44,6 +51,46 @@ type CreateLearningPathResponseBody struct {
 
 func NewCreateLearningPathResponseBody() *CreateLearningPathResponseBody {
 	return &CreateLearningPathResponseBody{
+		BaseResponseBody: newBaseResponseBody(),
+	}
+}
+
+type CreateLearningPathStopResponseBody struct {
+	*BaseResponseBody
+}
+
+func NewCreateLearningPathStopResponseBody() *CreateLearningPathStopResponseBody {
+	return &CreateLearningPathStopResponseBody{
+		BaseResponseBody: newBaseResponseBody(),
+	}
+}
+
+type SetLearningPathTitleResponseBody struct {
+	*BaseResponseBody
+}
+
+func NewSetLearningPathTitleResponseBody() *SetLearningPathTitleResponseBody {
+	return &SetLearningPathTitleResponseBody{
+		BaseResponseBody: newBaseResponseBody(),
+	}
+}
+
+type SetLearningPathStopTitleResponseBody struct {
+	*BaseResponseBody
+}
+
+func NewSetLearningPathStopTitleResponseBody() *SetLearningPathStopTitleResponseBody {
+	return &SetLearningPathStopTitleResponseBody{
+		BaseResponseBody: newBaseResponseBody(),
+	}
+}
+
+type SetLearningPathStopBodyResponseBody struct {
+	*BaseResponseBody
+}
+
+func NewSetLearningPathStopBodyResponseBody() *SetLearningPathStopBodyResponseBody {
+	return &SetLearningPathStopBodyResponseBody{
 		BaseResponseBody: newBaseResponseBody(),
 	}
 }
