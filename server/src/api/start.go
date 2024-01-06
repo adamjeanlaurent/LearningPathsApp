@@ -55,5 +55,7 @@ func (server *ApiServer) ConnectAndRun() {
 
 	configureRoutes(server)
 
+	server.port = ":3000"
+
 	log.Fatal(server.app.Listen(server.port))
 }

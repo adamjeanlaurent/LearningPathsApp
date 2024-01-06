@@ -9,6 +9,11 @@ MileStone 1 Basic Server:
 - login to account (DONE)
 
 MileStone 2 Better Server:
+- reduce boiler plate: 
+    - parsing middleware
+    - Open AI Spec (In-Progress)
+    - validate context in middleware
+    - generated golang code
 - better create learning path stop (DONE)
 - use uuids
 - delete stop
@@ -27,5 +32,4 @@ MileStone 3 Basic UI:
 - 
 
 MileStone 4 Robust Server:
-- better validation middleware to avoid boilerplate
 - search

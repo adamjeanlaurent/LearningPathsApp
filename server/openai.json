@@ -1,0 +1,108 @@
+{
+    "openai": "3.1.0",
+    "info": {
+        "title": "Learning Paths API",
+        "version": "1.0"
+    },
+    "server": {
+        "url": "localhost:3000/v1/api",
+        "description": "dev server"
+    },
+    "components": {
+        "schemas": {
+            "LearningPathId": {
+                "type":"integer",
+                "format": "int32"
+            },
+            "LearningPathStopId": {
+                "type":"integer",
+                "format": "int32"
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string"
+                    },
+                    "messages": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CreateAccountRequest": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "LoginRequest": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CreateLearningPathRequest": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CreateLearningPathStopRequest": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "learningPathId": {
+                        "$ref": "#/components/schemas/LearningPathId"
+                    },
+                    "markdownBody": {
+                        "type": "string"
+                    },
+                    "stopNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "SetLearningPathStopTitleRequest": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "learningPathStopId": {
+                        "$ref": "#/components/schemas/LearningPathStopId"
+                    }
+                }
+            },
+            "SetLearningPathStopBodyRequest": {
+                "type": "object",
+                "properties": {
+                    "markdownBody": {
+                        "type": "string"
+                    },
+                    "learningPathStopId": {
+                        "$ref": "#/components/schemas/LearningPathStopId"
+                    }
+                }
+            }
+
+        }
+    },
+    "paths": {
+
+    }
+}

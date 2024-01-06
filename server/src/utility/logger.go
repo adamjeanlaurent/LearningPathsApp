@@ -24,7 +24,6 @@ func getLogHeading() string {
 }
 
 func LogError(err error) {
-
 	var logHeading string = getLogHeading()
 	fmt.Print(logHeading)
 	color.Red(err.Error())
