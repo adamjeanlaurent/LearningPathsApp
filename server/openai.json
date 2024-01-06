@@ -18,13 +18,21 @@
                 "type":"integer",
                 "format": "int32"
             },
-            "ErrorResponse": {
+            "GenericErrorResponse": {
                 "type": "object",
                 "properties": {
                     "code": {
                         "type": "string"
                     },
                     "messages": {
+                        "type": "string"
+                    }
+                }
+            },
+            "GenericSuccessResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
                         "type": "string"
                     }
                 }
@@ -99,10 +107,197 @@
                     }
                 }
             }
-
         }
     },
     "paths": {
-
+        "/auth/createAccount": {
+            "post": {
+                "description": "Create an account.",
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                   "$ref": "#/components/schemas/GenericSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Error response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "get": {
+                "description": "Login to account.",
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                   "$ref": "#/components/schemas/GenericSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Error response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/learningPath/create": {
+            "post": {
+                "description": "Create a Learning path.",
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                   "$ref": "#/components/schemas/GenericSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Error response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/learningPath/update/title": {
+            "post": {
+                "description": "Update a learning paths title.",
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                   "$ref": "#/components/schemas/GenericSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Error response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/learningPathStop/update/title": {
+            "post": {
+                "description": "Update Learning Path stops title.",
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                   "$ref": "#/components/schemas/GenericSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Error response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/learningPathStop/update/body": {
+            "post": {
+                "description": "Update Learning Path stops body.",
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                   "$ref": "#/components/schemas/GenericSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Error response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/learningPathStop/create": {
+            "post": {
+                "description": "Create a learning path stop.",
+                "responses": {
+                    "200": {
+                        "description": "Success response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                   "$ref": "#/components/schemas/GenericSuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Error response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GenericErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
