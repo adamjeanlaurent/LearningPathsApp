@@ -113,6 +113,13 @@
         "/auth/createAccount": {
             "post": {
                 "description": "Create an account.",
+                "requestBody": {
+                    "content": {
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateAccountRequest"
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success response",
@@ -140,6 +147,13 @@
         "/auth/login": {
             "get": {
                 "description": "Login to account.",
+                "requestBody": {
+                    "content": {
+                        "schema": {
+                            "$ref": "#/components/schemas/LoginRequest"
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success response",
@@ -167,6 +181,13 @@
         "/learningPath/create": {
             "post": {
                 "description": "Create a Learning path.",
+                "requestBody": {
+                    "content": {
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateLearningPathRequest"
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success response",
@@ -194,6 +215,13 @@
         "/learningPath/update/title": {
             "post": {
                 "description": "Update a learning paths title.",
+                "requestBody": {
+                    "content": {
+                        "schema": {
+                            "$ref": "#/components/schemas/SetLearningPathTitleRequest"
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success response",
@@ -221,6 +249,13 @@
         "/learningPathStop/update/title": {
             "post": {
                 "description": "Update Learning Path stops title.",
+                "requestBody": {
+                    "content": {
+                        "schema": {
+                            "$ref": "#/components/schemas/SetLearningPathStopTitleRequest"
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success response",
@@ -248,6 +283,13 @@
         "/learningPathStop/update/body": {
             "post": {
                 "description": "Update Learning Path stops body.",
+                "requestBody": {
+                    "content": {
+                        "schema": {
+                            "$ref": "#/components/schemas/SetLearningPathStopBodyRequest"
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success response",
@@ -275,6 +317,13 @@
         "/learningPathStop/create": {
             "post": {
                 "description": "Create a learning path stop.",
+                "requestBody": {
+                    "content": {
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateLearningPathStopRequest"
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Success response",
