@@ -51,6 +51,12 @@ func (server *ApiServer) ConnectAndRun() {
 	// load config
 	server.config = utility.NewServerConfiguration()
 
+	err = server.config.Validate()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	server.app = fiber.New()
 
 	configureRoutes(server)

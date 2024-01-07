@@ -1,0 +1,35 @@
+
+MileStone 1 Basic Server:
+- Logging (DONE)
+- creating accounts (DONE)
+- creating learning path (DONE)
+- creating learning path stop (DONE)
+- Configuration with Env Vars (DONE)
+- JWT tokens (DONE)
+- login to account (DONE)
+
+MileStone 2 Better Server:
+- reduce boiler plate: 
+    - parsing middleware
+    - Open AI Spec (In-Progress)
+    - validate context in middleware
+    - generated golang code
+- better create learning path stop (DONE)
+- use uuids
+- delete stop
+- delete path
+- edit path body (DONE)
+- edit path Title (DONE)
+- edit stop Title (DONE)
+- move stop
+- delete account
+- get learning paths
+- get learning paths for stop
+- get account
+- logout
+
+MileStone 3 Basic UI:
+- 
+
+MileStone 4 Robust Server:
+- search
