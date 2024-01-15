@@ -23,19 +23,19 @@ func configureRoutes(server *ApiServer) {
 	v1.Use(server.logRequestBody)
 
 	var authRouter fiber.Router = v1.Group("/auth")
-	authRouter.Post("/createAccount", server.handleCreateAccount)
-	authRouter.Get("/loginToAccount", server.handleLogin)
+	authRouter.Post("/createAccount", validateRequestBody(CreateAccountRequestBody{}), server.handleCreateAccount)
+	authRouter.Get("/loginToAccount", validateRequestBody(LoginToAccountRequestBody{}), server.handleLogin)
 
 	var learningPathRouter fiber.Router = v1.Group("/learningPath")
 	learningPathRouter.Use(server.validateJwtToken)
-	learningPathRouter.Post("/create", server.handleCreateLearningPath)
-	learningPathRouter.Post("/update/title", server.handleSetLearningPathTitle)
+	learningPathRouter.Post("/create", validateRequestBody(CreateLearningPathRequestBody{}), server.handleCreateLearningPath)
+	learningPathRouter.Post("/update/title", validateRequestBody(SetLearningPathStopTitleRequestBody{}), server.handleSetLearningPathTitle)
 
 	var learningPathStopRouter fiber.Router = v1.Group("/learningPathStop")
 	learningPathStopRouter.Use(server.validateJwtToken)
-	learningPathStopRouter.Post("/create", server.handleCreateLearningPathStop)
-	learningPathStopRouter.Post("/update/title", server.handleSetLearningPathStopTitle)
-	learningPathStopRouter.Post("/update/body", server.handleSetLearningPathStopBody)
+	learningPathStopRouter.Post("/create", validateRequestBody(CreateLearningPathStopRequestBody{}), server.handleCreateLearningPathStop)
+	learningPathStopRouter.Post("/update/title", validateRequestBody(SetLearningPathStopTitleRequestBody{}), server.handleSetLearningPathStopTitle)
+	learningPathStopRouter.Post("/update/body", validateRequestBody(SetLearningPathStopBodyRequestBody{}), server.handleSetLearningPathStopBody)
 }
 
 func (server *ApiServer) ConnectAndRun() {

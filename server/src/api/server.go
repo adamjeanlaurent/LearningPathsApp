@@ -24,7 +24,7 @@ func NewApiServer() *ApiServer {
 }
 
 func (server *ApiServer) handleCreateAccount(c *fiber.Ctx) error {
-	var requestBody CreateAccountRequestBody
+	requestBody := c.Locals("body").(*CreateAccountRequestBody)
 
 	var response *CreateAccountResponseBody = NewCreateAccountResponseBody()
 
@@ -80,7 +80,7 @@ func (server *ApiServer) handleCreateAccount(c *fiber.Ctx) error {
 }
 
 func (server *ApiServer) handleLogin(c *fiber.Ctx) error {
-	var requestBody LoginToAccountRequestBody
+	requestBody := c.Locals("body").(*LoginToAccountRequestBody)
 
 	var response *LoginToAccountResponseBody = NewLoginToAccountResponseBody()
 
@@ -120,15 +120,9 @@ func (server *ApiServer) handleLogin(c *fiber.Ctx) error {
 }
 
 func (server *ApiServer) handleSetLearningPathStopBody(c *fiber.Ctx) error {
-	var requestBody SetLearningPathStopBodyRequestBody
+	requestBody := c.Locals("body").(*SetLearningPathStopBodyRequestBody)
 
 	var response *SetLearningPathStopTitleResponseBody = NewSetLearningPathStopTitleResponseBody()
-
-	var err error = parseRequestBody(&requestBody, c)
-	if err != nil {
-		utility.LogError(err)
-		return sendParsingErrorResponse(response, c)
-	}
 
 	userTableID, err := getUserTableIDFromContext(c)
 	if err != nil {
@@ -152,15 +146,9 @@ func (server *ApiServer) handleSetLearningPathStopBody(c *fiber.Ctx) error {
 }
 
 func (server *ApiServer) handleSetLearningPathStopTitle(c *fiber.Ctx) error {
-	var requestBody SetLearningPathStopTitleRequestBody
+	requestBody := c.Locals("body").(*SetLearningPathStopTitleRequestBody)
 
 	response := NewSetLearningPathStopTitleResponseBody()
-
-	var err error = parseRequestBody(&requestBody, c)
-	if err != nil {
-		utility.LogError(err)
-		return sendParsingErrorResponse(response, c)
-	}
 
 	userTableID, err := getUserTableIDFromContext(c)
 	if err != nil {
@@ -184,15 +172,9 @@ func (server *ApiServer) handleSetLearningPathStopTitle(c *fiber.Ctx) error {
 }
 
 func (server *ApiServer) handleSetLearningPathTitle(c *fiber.Ctx) error {
-	var requestBody SetLearningPathTitleRequestBody
+	requestBody := c.Locals("body").(*SetLearningPathTitleRequestBody)
 
 	response := NewSetLearningPathTitleResponseBody()
-
-	var err error = parseRequestBody(&requestBody, c)
-	if err != nil {
-		utility.LogError(err)
-		return sendParsingErrorResponse(response, c)
-	}
 
 	userTableID, err := getUserTableIDFromContext(c)
 	if err != nil {
@@ -216,15 +198,9 @@ func (server *ApiServer) handleSetLearningPathTitle(c *fiber.Ctx) error {
 }
 
 func (server *ApiServer) handleCreateLearningPath(c *fiber.Ctx) error {
-	var requestBody CreateLearningPathRequestBody
+	requestBody := c.Locals("body").(*CreateLearningPathRequestBody)
 
 	response := NewCreateLearningPathResponseBody()
-
-	var err error = parseRequestBody(&requestBody, c)
-	if err != nil || requestBody.Title == "" {
-		utility.LogError(err)
-		return sendParsingErrorResponse(response, c)
-	}
 
 	userTableID, err := getUserTableIDFromContext(c)
 	if err != nil {
@@ -243,15 +219,9 @@ func (server *ApiServer) handleCreateLearningPath(c *fiber.Ctx) error {
 }
 
 func (server *ApiServer) handleCreateLearningPathStop(c *fiber.Ctx) error {
-	var requestBody CreateLearningPathStopRequestBody
+	requestBody := c.Locals("body").(*CreateLearningPathStopRequestBody)
 
 	var response *CreateLearningPathStopResponseBody = NewCreateLearningPathStopResponseBody()
-
-	var err error = parseRequestBody(&requestBody, c)
-	if err != nil {
-		utility.LogError(err)
-		return sendParsingErrorResponse(response, c)
-	}
 
 	userTableID, err := getUserTableIDFromContext(c)
 	if err != nil {

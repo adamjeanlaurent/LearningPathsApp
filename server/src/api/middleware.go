@@ -3,10 +3,31 @@ package api
 import (
 	"encoding/json"
 	"log"
+	"reflect"
 
 	"github.com/adamjeanlaurent/LearningPathsApp/utility"
 	"github.com/gofiber/fiber/v2"
 )
+
+func validateRequestBody(expectedType interface{}) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		// Create an instance of the expected type
+		requestBody := reflect.New(reflect.TypeOf(expectedType).Elem()).Interface()
+
+		// Parse the JSON request body into the expected type
+		if err := ctx.BodyParser(requestBody); err != nil {
+			return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": "Parsing Error",
+			})
+		}
+
+		// You can now access the parsed data as requestBody
+		ctx.Locals("body", requestBody)
+
+		// Continue processing the request
+		return ctx.Next()
+	}
+}
 
 func (server *ApiServer) validateJwtToken(c *fiber.Ctx) error {
 	var jwtToken = c.Cookies("jwt")
