@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"reflect"
 
@@ -16,6 +17,7 @@ func validateRequestBody(expectedType interface{}) fiber.Handler {
 
 		// Parse the JSON request body into the expected type
 		if err := ctx.BodyParser(requestBody); err != nil {
+			utility.LogError(err)
 			return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"error": "Parsing Error",
 			})
@@ -38,6 +40,25 @@ func (server *ApiServer) validateJwtToken(c *fiber.Ctx) error {
 
 	c.Locals("userStableId", stableId)
 	c.Locals("userTableID", userTableId)
+
+	stableId, ok := c.Locals("userStableId").(string)
+
+	if !ok || stableId == "" {
+		utility.LogError(errors.New("invalid user info in auth token"))
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Internal Server Error",
+		})
+	}
+
+	tableId, ok := c.Locals("userTableId").(uint)
+
+	if !ok || tableId == 0 {
+		utility.LogError(errors.New("invalid user info in auth token"))
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Internal Server Error",
+		})
+	}
+
 	return nil
 }
 

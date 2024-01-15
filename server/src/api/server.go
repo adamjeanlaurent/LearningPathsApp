@@ -28,12 +28,6 @@ func (server *ApiServer) handleCreateAccount(c *fiber.Ctx) error {
 
 	var response *CreateAccountResponseBody = NewCreateAccountResponseBody()
 
-	var err error = parseRequestBody(&requestBody, c)
-	if err != nil || requestBody.Email == "" || requestBody.Password == "" {
-		utility.LogError(err)
-		return sendParsingErrorResponse(response, c)
-	}
-
 	existingUser := storage.User{}
 
 	queryResult := server.store.GetUserByEmail(requestBody.Email, &existingUser)
@@ -84,12 +78,6 @@ func (server *ApiServer) handleLogin(c *fiber.Ctx) error {
 
 	var response *LoginToAccountResponseBody = NewLoginToAccountResponseBody()
 
-	var err error = parseRequestBody(&requestBody, c)
-	if err != nil || requestBody.Email == "" || requestBody.Password == "" {
-		utility.LogError(err)
-		return sendParsingErrorResponse(response, c)
-	}
-
 	existingUser := &storage.User{}
 
 	queryResult := server.store.GetUserByEmail(requestBody.Email, existingUser)
@@ -99,7 +87,7 @@ func (server *ApiServer) handleLogin(c *fiber.Ctx) error {
 		return sendResponse(response, c, fiber.StatusUnauthorized, ResponseCode_NoAccountWithEmailFound, "")
 	}
 
-	err = utility.ComparePasswordWithHash(requestBody.Password, existingUser.Hash)
+	err := utility.ComparePasswordWithHash(requestBody.Password, existingUser.Hash)
 	if err != nil {
 		utility.LogError(err)
 		return sendResponse(response, c, fiber.StatusUnauthorized, ResponseCode_GenericError, "")
@@ -124,11 +112,7 @@ func (server *ApiServer) handleSetLearningPathStopBody(c *fiber.Ctx) error {
 
 	var response *SetLearningPathStopTitleResponseBody = NewSetLearningPathStopTitleResponseBody()
 
-	userTableID, err := getUserTableIDFromContext(c)
-	if err != nil {
-		utility.LogError(err)
-		return sendInternalServerError(response, c, "invalid table ID")
-	}
+	userTableID := getUserTableIDFromContext(c)
 
 	stop, err := server.store.GetLearningPathStopByID(userTableID, requestBody.LearningPathStopID)
 	if err != nil {
@@ -150,11 +134,7 @@ func (server *ApiServer) handleSetLearningPathStopTitle(c *fiber.Ctx) error {
 
 	response := NewSetLearningPathStopTitleResponseBody()
 
-	userTableID, err := getUserTableIDFromContext(c)
-	if err != nil {
-		utility.LogError(err)
-		return sendInternalServerError(response, c, "invalid table ID")
-	}
+	userTableID := getUserTableIDFromContext(c)
 
 	stop, err := server.store.GetLearningPathStopByID(userTableID, requestBody.LearningPathStopID)
 	if err != nil {
@@ -176,11 +156,7 @@ func (server *ApiServer) handleSetLearningPathTitle(c *fiber.Ctx) error {
 
 	response := NewSetLearningPathTitleResponseBody()
 
-	userTableID, err := getUserTableIDFromContext(c)
-	if err != nil {
-		utility.LogError(err)
-		return sendInternalServerError(response, c, "invalid table ID")
-	}
+	userTableID := getUserTableIDFromContext(c)
 
 	learningPath, err := server.store.GetLearningPathByID(userTableID, requestBody.LearningPathID)
 	if err != nil {
@@ -202,13 +178,9 @@ func (server *ApiServer) handleCreateLearningPath(c *fiber.Ctx) error {
 
 	response := NewCreateLearningPathResponseBody()
 
-	userTableID, err := getUserTableIDFromContext(c)
-	if err != nil {
-		utility.LogError(err)
-		return sendInternalServerError(response, c, "invalid table ID")
-	}
+	userTableID := getUserTableIDFromContext(c)
 
-	_, err = server.store.CreateLearningPath(requestBody.Title, userTableID)
+	_, err := server.store.CreateLearningPath(requestBody.Title, userTableID)
 
 	if err != nil {
 		utility.LogError(err)
@@ -223,11 +195,7 @@ func (server *ApiServer) handleCreateLearningPathStop(c *fiber.Ctx) error {
 
 	var response *CreateLearningPathStopResponseBody = NewCreateLearningPathStopResponseBody()
 
-	userTableID, err := getUserTableIDFromContext(c)
-	if err != nil {
-		utility.LogError(err)
-		return sendInternalServerError(response, c, "invalid table ID")
-	}
+	userTableID := getUserTableIDFromContext(c)
 
 	// get the learning path
 	learningPath, err := server.store.GetLearningPathByID(userTableID, requestBody.LearningPathID)

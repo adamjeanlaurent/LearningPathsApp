@@ -1,8 +1,6 @@
 package api
 
 import (
-	"errors"
-
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -24,28 +22,14 @@ func sendResponse(responseBody IBaseResponseBody, c *fiber.Ctx, httpStatus int, 
 	return c.Status(httpStatus).JSON(responseBody)
 }
 
-func parseRequestBody(out interface{}, c *fiber.Ctx) error {
-	return c.BodyParser(&out)
+func getUserStableIDFromContext(c *fiber.Ctx) string {
+	userStableId := c.Locals("userStableId").(string)
+
+	return userStableId
 }
 
-func getUserStableIDFromContext(c *fiber.Ctx) (string, error) {
-	// type assertion so we don't panic
-	userStableId, ok := c.Locals("userStableId").(string)
+func getUserTableIDFromContext(c *fiber.Ctx) uint {
+	userTableId := c.Locals("userStableId").(uint)
 
-	if !ok || userStableId == "" {
-		return "", errors.New("invalid userStableId")
-	}
-
-	return userStableId, nil
-}
-
-func getUserTableIDFromContext(c *fiber.Ctx) (uint, error) {
-	// type assertion so we don't panic
-	userTableId, ok := c.Locals("userStableId").(uint)
-
-	if !ok || userTableId == 0 {
-		return 0, errors.New("invalid userTableId")
-	}
-
-	return userTableId, nil
+	return userTableId
 }

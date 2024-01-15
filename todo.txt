@@ -10,7 +10,7 @@ MileStone 1 Basic Server:
 
 MileStone 2 Better Server:
 - reduce boiler plate: 
-    - parsing middleware
+    - parsing middleware (DONE)
     - Open AI Spec (In-Progress)
     - validate context in middleware
     - generated golang code
